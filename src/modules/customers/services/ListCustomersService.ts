@@ -5,31 +5,24 @@ import AppError from '@shared/errors/AppError';
 import Customer from '../infra/typeorm/entities/Customer';
 import ICustomersRepository from '../repositories/ICustomersRepository';
 
-interface IRequest {
-  name: string;
-  email: string;
-}
+
 
 @injectable()
-class CreateCustomerService {
+class ListCustomerService {
   constructor(
     @inject('CustomersRepository')
     private customersRepository: ICustomersRepository) {}
 
-  public async execute({ name, email }: IRequest): Promise<Customer> {
-     const existentCustomer = await this.customersRepository.findByEmail(email);
 
-     if (existentCustomer) {
+  public async execute(): Promise<Customer[]> {
+     const existentCustomers = await this.customersRepository.findAll();
+
+     if (!existentCustomers) {
        throw new AppError('Customer email already exists');
      }
 
-     const customer = await this.customersRepository.create({
-       name,
-       email
-     });
-
-     return customer;
+     return existentCustomers;
   }
 }
 
-export default CreateCustomerService;
+export default ListCustomerService;

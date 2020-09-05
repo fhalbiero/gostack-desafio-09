@@ -1,0 +1,21 @@
+import { inject, injectable } from 'tsyringe';
+
+import Product from '../infra/typeorm/entities/Product';
+import IProductsRepository from '../repositories/IProductsRepository';
+
+
+@injectable()
+class ListProductService {
+  constructor(
+    @inject('ProductsRepository')
+    private productsRepository: IProductsRepository
+  ) {}
+
+  public async execute(): Promise<Product[]> {
+      const findProducts = await this.productsRepository.findAll();
+
+      return findProducts;
+  }
+}
+
+export default ListProductService;

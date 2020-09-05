@@ -5,6 +5,7 @@ import CustomersController from '../controller/CustomersController';
 const customersRouter = Router();
 const customersController = new CustomersController();
 
+customersRouter.get('/', customersController.show);
 customersRouter.post('/', customersController.create);
 
 export default customersRouter;
